@@ -6,7 +6,7 @@ let first = 0;
 let second = 0;
 let result = 0;
 let operator = '';
-let currentStage = "FIRST"; // "FIRST" | "OPERATOR" | "SECOND" | "RESULT"
+let currentStage = "FIRST"; // "FIRST" | "OPERATOR" | "SECOND" | "RESULT" | "ERROR"
 
 function add(a, b) {
   return a + b;
@@ -104,17 +104,8 @@ function onBackspace() {
 }
 
 function onClear() {
-  switch(currentStage) {
-    case "FIRST":
-    case "SECOND":
-      clearDisplay();
-      break;
-    case "OPERATOR":
-    case "RESULT":
-      setStage("FIRST");
-      clearDisplay();
-      break;
-  }
+  setStage("FIRST");
+  clearDisplay();
 }
 
 function onDigit(val) {
@@ -211,24 +202,67 @@ document.addEventListener("keydown", (e) => {
     case '8':
     case '9':
     case '.':
+      document.getElementById(e.key).classList.add("pressed");
       onDigit(e.key);
       break;
     case '+':
     case '-':
     case '*':
     case '/':
+      document.getElementById(e.key).classList.add("pressed");
       onOperator(e.key);
       break;
     case '=':
     case "Enter":
+      document.getElementById("=").classList.add("pressed");
       onEquals();
       break;
     case "Backspace":
+      document.getElementById("back").classList.add("pressed");
       onBackspace();
       break;
     case 'C':
     case "Delete":
+    case "Escape":
+      document.getElementById("clear").classList.add("pressed");
       onClear();
       break;
   }
-})
+});
+
+document.addEventListener("keyup", (e) => {
+  e.preventDefault();
+  switch(e.key) {
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+    case '.':
+      document.getElementById(e.key).classList.remove("pressed");
+      break;
+    case '+':
+    case '-':
+    case '*':
+    case '/':
+      document.getElementById(e.key).classList.remove("pressed");
+      break;
+    case '=':
+    case "Enter":
+      document.getElementById("=").classList.remove("pressed");
+      break;
+    case "Backspace":
+      document.getElementById("back").classList.remove("pressed");
+      break;
+    case 'C':
+    case "Delete":
+    case "Escape":
+      document.getElementById("clear").classList.remove("pressed");
+      break;
+  }
+});

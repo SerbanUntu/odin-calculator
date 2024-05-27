@@ -1,3 +1,11 @@
+:root {
+  --operator: hsl(200deg 50% 50%);
+  --digit: hsl(0, 0%, 50%);
+  --clear: hsl(0deg 50% 50%);
+  --bg: hsl(220, 40%, 15%);
+  --display: hsl(152, 50%, 64%);
+}
+
 * {
   margin: 0;
   box-sizing: border-box;
@@ -10,23 +18,34 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: var(--bg);
 }
 
 .calculator {
-  width: 600px;
-}
-
-.calculator, .display, .buttons {
-  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
   border-radius: 8px;
   padding: 32px;
+  background: linear-gradient(rgb(100, 100, 100), rgb(50, 50, 50));
+  box-shadow: inset 0px 0px 0px 5px #00000050;
+}
+
+.display {
+  width: 100%;
+  padding: 16px;
+  background-color: var(--display);
+  box-shadow: inset 0px 3px 1px 4px rgba(0,0,0,0.4),
+              inset 0px -3px 1px 2px rgba(255,255,255,0.4);
 }
 
 .buttons {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap-reverse;
-  padding: 32px 205px 32px 205px;
+  gap: 10px 10px;
+  width: 340px;
 }
 
 .display-text {
@@ -34,10 +53,40 @@ body {
 }
 
 button {
-  width: 20px;
-  height: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  background-color: var(--digit);
+  outline: none;
+  border: none;
+  transition: all ease-out 75ms;
+  box-shadow: 3px 3px 3px 1px rgba(0,0,0,0.1),
+              inset -3px -3px 3px 1px rgba(0,0,0,0.3),
+              inset 3px 3px 3px 1px rgba(255,255,255,0.3),
+              inset 0px 0px 0px 0px #000000;
+}
+
+button:active, .pressed {
+  box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.1),
+              inset 0px 0px 0px 0px rgba(0,0,0,0.3),
+              inset 0px 0px 0px 0px rgba(255,255,255,0.3),
+              inset 0px 0px 5px 2px #000000;
+}
+
+.operator {
+  background-color: var(--operator);
 }
 
 .equals {
-  width: 60px;
+  width: 200px;
+  background-color: var(--operator);
+  border-radius: 8px;
+}
+
+.back, .clear {
+  background-color: var(--clear);
+  border-radius: 8px;
 }
