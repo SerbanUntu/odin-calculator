@@ -1,0 +1,43 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calculator {
+  width: 600px;
+}
+
+.calculator, .display, .buttons {
+  border: 2px solid black;
+  border-radius: 8px;
+  padding: 32px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap-reverse;
+  padding: 32px 205px 32px 205px;
+}
+
+.display-text {
+  text-align: right;
+}
+
+button {
+  width: 20px;
+  height: 20px;
+}
+
+.equals {
+  width: 60px;
+}
