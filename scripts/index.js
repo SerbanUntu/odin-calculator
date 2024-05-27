@@ -1,6 +1,7 @@
 const displayText = document.querySelector(".display-text");
-const stageText = document.querySelector(".stage-text");
 const buttons = document.querySelectorAll("button");
+const copyrightText = document.querySelector(".copyright-text");
+copyrightText.textContent = `© ${(new Date()).getFullYear()} Serban Untu`;
 
 let first = 0;
 let second = 0;
@@ -38,7 +39,6 @@ function operate(a, op, b) {
 
 function setStage(stage) {
   currentStage = stage;
-  stageText.textContent = stage;
 }
 
 function backspace() {
@@ -75,15 +75,16 @@ function addDigit(digit) {
 
 function addOperator(val) {
   operator = val;
-  if(val === '*') {
-    displayText.textContent = '×';
-  } else if(val === '/') {
-    displayText.textContent = '÷';
-  } else displayText.textContent = val;
+  displayText.textContent = val;
 }
 
 function calculate(a, op, b) {
-  let x = operate(a, op, b);
+  let x = Math.round(operate(a, op, b) * 10e5) / 10e5;
+  if(!isFinite(x) || isNaN(x)) {
+    displayText.textContent = "Err";
+    setStage("ERROR");
+    return 0;
+  }
   displayText.textContent = `${x}`;
   return x;
 }
