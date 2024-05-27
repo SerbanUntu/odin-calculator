@@ -79,7 +79,8 @@ function addOperator(val) {
 }
 
 function calculate(a, op, b) {
-  let x = Math.round(operate(a, op, b) * 10e5) / 10e5;
+  let x = Math.round(operate(a, op, b) * 10e4) / 10e4;
+  if(`${x}`.includes('e')) x = x.toExponential(5);
   if(!isFinite(x) || isNaN(x)) {
     displayText.textContent = "Err";
     setStage("ERROR");
@@ -145,8 +146,10 @@ function onOperator(val) {
       setStage("OPERATOR");
       second = +displayText.textContent;
       first = calculate(first, operator, second);
-      addOperator(val);
-      setDisplay(first);
+      if(displayText.textContent !== "Err") {
+        addOperator(val);
+        setDisplay(first);
+      }
       break;
     case "RESULT":
       setStage("OPERATOR");
@@ -222,6 +225,7 @@ document.addEventListener("keydown", (e) => {
       document.getElementById("back").classList.add("pressed");
       onBackspace();
       break;
+    case 'c':
     case 'C':
     case "Delete":
     case "Escape":
@@ -260,6 +264,7 @@ document.addEventListener("keyup", (e) => {
     case "Backspace":
       document.getElementById("back").classList.remove("pressed");
       break;
+    case 'c':
     case 'C':
     case "Delete":
     case "Escape":

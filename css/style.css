@@ -45,26 +45,26 @@ body {
               inset 0px -3px 1px 2px rgba(255,255,255,0.4);
 }
 
+.display-text {
+  position: relative;
+  top: 5px;
+  font-family: 'LCD2', 'Digitalism', sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 1;
+  color: black;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  overflow-wrap: none;
+  text-align: right;
+}
+
 .buttons {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap-reverse;
   gap: 10px 10px;
   width: 340px;
-}
-
-.display-text {
-  font-family: 'LCD2', 'Digitalism', sans-serif;
-  color: black;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  overflow-wrap: none;
-  font-size: 48px;
-  font-weight: 600;
-  line-height: 1;
-  position: relative;
-  top: 5px;
-  text-align: right;
 }
 
 button {
