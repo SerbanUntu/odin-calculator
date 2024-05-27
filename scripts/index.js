@@ -2,6 +2,12 @@ const displayText = document.querySelector(".display-text");
 const stageText = document.querySelector(".stage-text");
 const buttons = document.querySelectorAll("button");
 
+let first = 0;
+let second = 0;
+let result = 0;
+let operator = '';
+let currentStage = "FIRST"; // "FIRST" | "OPERATOR" | "SECOND" | "RESULT"
+
 function add(a, b) {
   return a + b;
 }
@@ -17,12 +23,6 @@ function multiply(a, b) {
 function divide(a, b) {
   return a / b;
 }
-
-let first = 0;
-let second = 0;
-let result = 0;
-let operator = '';
-let currentStage = "FIRST"; // "FIRST" | "OPERATOR" | "SECOND" | "RESULT"
 
 function operate(a, op, b) {
   switch(op) {
@@ -88,91 +88,147 @@ function calculate(a, op, b) {
   return x;
 }
 
+function onBackspace() {
+  switch(currentStage) {
+    case "FIRST":
+    case "SECOND":
+      backspace();
+      break;
+    case "OPERATOR":
+      break;
+    case "RESULT":
+      setStage("FIRST");
+      backspace();
+      break;
+  }
+}
+
+function onClear() {
+  switch(currentStage) {
+    case "FIRST":
+    case "SECOND":
+      clearDisplay();
+      break;
+    case "OPERATOR":
+    case "RESULT":
+      setStage("FIRST");
+      clearDisplay();
+      break;
+  }
+}
+
+function onDigit(val) {
+  switch(currentStage) {
+    case "FIRST":
+      addDigit(val);
+      break;
+    case "OPERATOR":
+      setStage("SECOND");
+      clearDisplay();
+      addDigit(val);
+      break;
+    case "SECOND":
+      addDigit(val);
+      break;
+    case "RESULT":
+      setStage("FIRST");
+      clearDisplay();
+      addDigit(val);
+      break;
+  }
+}
+
+function onOperator(val) {
+  switch(currentStage) {
+    case "FIRST":
+      setStage("OPERATOR");
+      first = +displayText.textContent;
+      addOperator(val);
+      break;
+    case "OPERATOR":
+      clearDisplay();
+      addOperator(val);
+      break;
+    case "SECOND":
+      setStage("OPERATOR");
+      second = +displayText.textContent;
+      first = calculate(first, operator, second);
+      addOperator(val);
+      setDisplay(first);
+      break;
+    case "RESULT":
+      setStage("OPERATOR");
+      first = result;
+      addOperator(val);
+      break;
+  }
+}
+
+function onEquals() {
+  switch(currentStage) {
+    case "FIRST":
+    case "OPERATOR":
+      break;
+    case "SECOND":
+      setStage("RESULT");
+      second = +displayText.textContent;
+      result = calculate(first, operator, second);
+      break;
+    case "RESULT":
+      result = calculate(result, operator, second);
+      break;
+  }
+}
+
 buttons.forEach(button => {
   button.addEventListener("click", (e) => {
     e.preventDefault();
     if(button.classList.contains("back")) {
-      switch(currentStage) {
-        case "FIRST":
-        case "SECOND":
-          backspace();
-          break;
-        case "OPERATOR":
-          break;
-        case "RESULT":
-          setStage("FIRST");
-          backspace();
-          break;
-      }
+      onBackspace();
     } else if(button.classList.contains("clear")) {
-      switch(currentStage) {
-        case "FIRST":
-        case "SECOND":
-          clearDisplay();
-          break;
-        case "OPERATOR":
-        case "RESULT":
-          setStage("FIRST");
-          clearDisplay();
-          break;
-      }
+      onClear();
     } else if(button.classList.contains("digit")) {
-      switch(currentStage) {
-        case "FIRST":
-          addDigit(button.id);
-          break;
-        case "OPERATOR":
-          setStage("SECOND");
-          clearDisplay();
-          addDigit(button.id);
-          break;
-        case "SECOND":
-          addDigit(button.id);
-          break;
-        case "RESULT":
-          setStage("FIRST");
-          clearDisplay();
-          addDigit(button.id);
-          break;
-      }
+      onDigit(button.id);
     } else if(button.classList.contains("operator")) {
-      switch(currentStage) {
-        case "FIRST":
-          setStage("OPERATOR");
-          first = +displayText.textContent;
-          addOperator(button.id);
-          break;
-        case "OPERATOR":
-          clearDisplay();
-          addOperator(button.id);
-          break;
-        case "SECOND":
-          setStage("OPERATOR");
-          second = +displayText.textContent;
-          first = calculate(first, operator, second);
-          addOperator(button.id);
-          setDisplay(first);
-          break;
-        case "RESULT":
-          setStage("OPERATOR");
-          first = result;
-          addOperator(button.id);
-          break;
-      }
+      onOperator(button.id);
     } else if(button.classList.contains("equals")) {
-      switch(currentStage) {
-        case "FIRST":
-        case "OPERATOR":
-          break;
-        case "SECOND":
-          setStage("RESULT");
-          second = +displayText.textContent;
-          result = calculate(first, operator, second);
-          break;
-        case "RESULT":
-          result = calculate(result, operator, second);
-          break;
-      }
+      onEquals();
     }
   });
 });
+
+document.addEventListener("keydown", (e) => {
+  e.preventDefault();
+  switch(e.key) {
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+    case '.':
+      onDigit(e.key);
+      break;
+    case '+':
+    case '-':
+    case '*':
+    case '/':
+      onOperator(e.key);
+      break;
+    case '=':
+    case "Enter":
+      onEquals();
+      break;
+    case "Backspace":
+      onBackspace();
+      break;
+    case 'C':
+    case "Delete":
+      onClear();
+      break;
+  }
+})
